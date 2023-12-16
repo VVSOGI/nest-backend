@@ -13,17 +13,19 @@ import { EditorModule } from './editor/editor.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        password: configService.get('DB_PASSWORD'),
-        username: configService.get('DB_USERNAME'),
-        entities: [__dirname + '/**/*.entity{.js,.ts}'],
-        database: configService.get('DB_DATABASE'),
-        synchronize: true,
-        logging: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          password: configService.get('DB_PASSWORD'),
+          username: configService.get('DB_USERNAME'),
+          entities: [__dirname + '/**/*.entity{.js,.ts}'],
+          database: configService.get('DB_DATABASE'),
+          synchronize: false,
+          logging: true,
+        };
+      },
     }),
     AuthModule,
     UserModule,

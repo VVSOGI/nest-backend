@@ -1,9 +1,9 @@
-import { Board } from 'src/boards/entities/boards.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Board } from '../../boards/entities/boards.entity';
+import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ type: 'varchar', length: 255 })
   id: string;
 
   @Column({ type: 'varchar', length: 40, unique: true })

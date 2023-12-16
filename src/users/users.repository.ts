@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { v4 } from 'uuid';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 
@@ -32,7 +33,11 @@ export class UsersRepository {
 
   async create(user: CreateUserDto) {
     const { email, password } = user;
-    const createUser = this.usersRepository.create({ email, password });
+    const createUser = this.usersRepository.create({
+      id: v4(),
+      email,
+      password,
+    });
     await this.usersRepository.save(createUser);
   }
 
