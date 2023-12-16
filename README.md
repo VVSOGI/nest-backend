@@ -1,73 +1,57 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Study nest backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 스펙
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+User API
+  - [x] 회원가입
 
-## Description
+Auth API
+  - [x] 로그인
+  - [x] return Access Token, Refresh Token
+  - [x] 프로필 조회
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 부가
 
-## Installation
+- [x] TypeORM
+- [x] Postgresql
+- [x] DB 마이그레이션
+- [x] Docker DB
 
-```bash
-$ npm install
-```
 
-## Running the app
 
-```bash
-# development
-$ npm run start
+## 마이그레이션
 
-# watch mode
-$ npm run start:dev
+마이그레이션에 대해서 어떻게 해야할지 감이 전혀 안 왔는데, 생각보다 간단한 방법으로 해결할 수 있었다.
 
-# production mode
-$ npm run start:prod
-```
+1. 마이그레이션은 마이그레이션 파일 생성이 우선 필요하다.
+    - 파일 생성
+        - 파일 위치에 대해서는 더 효율적인 위치가 있을 것 같음.
+        - 현재 위치는 `src` 폴더 내부에 `migrations` 폴더를 생성하여 관리하고 있다.
+2. 마이그레이션 파일을 생성한 후, 파일에 대한 편집을 한다.
+    - 파일 편집
+        - 'up' 함수에 변경 사항들을 코드로 작성.
+        - 'down' 함수에 변경 사항들을 롤백할 수 있는 코드를 작성.
+3. 마이그레이션을 실행한다.
+    - 마이그레이션 실행
+        - 마이그레이션을 할 때 경로를 잘 입력해줘야 한다. 현재 절대경로 표현이 잘 안 돼 있는지 경로를 잘 인식하지 못함.
+        - 따라서 상대경로로 ../를 통해 경로를 잘 찾아가도록 했음.
+        - 코드가 보기가 좀 지저분해지는 것 같은데, 이 부분에 대해서는 추후에 수정이 필요할듯.
+4. typeorm이 0.3.0 Version으로 바뀌면서 마이그레이션 실행에 대해서 방식이 바뀌었다고 한다.
+5. dataSource를 명시해주고 runMigrations 함수를 실행하는 방식으로 하기로 선택함.
+    - 나는 내가 원하는 특정 마이그레이션만을 먼저 실행하고 싶기 때문에 그렇게 했음.
+    - 변경점이 생기면 그때마다 코드를 추가함으로써 하나의 로그로 삼는 방식도 괜찮을 것 같음.
+6. 왜 이렇게 마이그레이션을 일일히 실행하냐면, 최대한 프로덕션 환경을 건드린다는 생각으로 접근하고 싶기 때문.
+    - 최대한 프로덕션에 가깝게
+        - typeorm에 syncronize 옵션을 true로 주면, 변경사항이 있을 때마다 자동으로 마이그레이션을 실행해주는데, 이렇게 하면 프로덕션에서 데이터가 날라가버리는 상황이 나올 수도 있음.
+7. 마이그레이션 파일도 git에 올림으로써 버전 관리의 일환으로 포함시켜놓는 게 좋을 것 같음.
+    - 마이그레이션 파일도 버전 관리.
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Docker Volume Mapping
+1. 도커로 DB를 컨테이너로 사용하다보니, 컨테이너가 종료되면 데이터가 날아가는 문제가 있었다.
+    - 컨테이너 종료시 데이터가 날라감.
+2. 컨테이너가 내려가도 백업된 데이터가 있으면 좋을 것 같음.
+3. 따라서 도커 볼륨 매핑을 통해 데이터를 백업하고자 함.
+    - 도커 볼륨 매핑시 데이터 보전 가능.
+        - 볼륨 매핑은 내 로컬 컴퓨터의 특정 경로를 컨테이너의 특정 경로에 매핑시켜주는 것.
+        - 따라서 컨테이너가 내려가도 내 로컬 컴퓨터의 특정 경로에 데이터가 남아있게 됨.
+4. 실험 결과 내 로컬 볼륨에 데이터가 남아있으면, 컨테이너가 내려가도 다시 컨테이너를 올렸을 때 데이터가 남아있는 것을 확인할 수 있었다.
