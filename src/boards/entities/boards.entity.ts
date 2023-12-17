@@ -28,6 +28,6 @@ export class Board {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'varchar', length: 255 })
   userId: string;
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { v4 } from 'uuid';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './entities/boards.entity';
 
@@ -17,7 +18,7 @@ export class BoardsRepository {
   ) {}
 
   async create(createBoard: CreateBoard) {
-    const board = this.boardsRepository.create(createBoard);
+    const board = this.boardsRepository.create({ id: v4(), ...createBoard });
 
     return await this.boardsRepository.save(board);
   }

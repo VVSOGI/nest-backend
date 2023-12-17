@@ -1,4 +1,4 @@
-import { IsEnum, IsIn, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { Priority } from '../type/types';
 
 export class CreateBoardDto {

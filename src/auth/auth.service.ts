@@ -30,23 +30,23 @@ export class AuthService {
   }
 
   private async generateToken(user: User) {
-    const accesstoken = await this.jwtService.signAsync(
+    const accessToken = await this.jwtService.signAsync(
       { email: user.email },
       { expiresIn: '5m' },
     );
-    const refreshtoken = await this.jwtService.signAsync(
+    const refreshToken = await this.jwtService.signAsync(
       { email: user.email },
       { expiresIn: '7d' },
     );
-    return { accesstoken, refreshtoken };
+    return { accessToken, refreshToken };
   }
 
   async login(user: LoginUserDto) {
     const { email, password } = user;
     const foundUsers = await this.usersRepository.findUserByEmail(email);
     await this.checkPassword(foundUsers, password);
-    const { accesstoken, refreshtoken } = await this.generateToken(foundUsers);
-    return { accesstoken, refreshtoken };
+    const { accessToken, refreshToken } = await this.generateToken(foundUsers);
+    return { accessToken, refreshToken };
   }
 
   async profile() {

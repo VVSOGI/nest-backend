@@ -17,10 +17,9 @@ export class CreateUserTable1702707050713 implements MigrationInterface {
             description VARCHAR NOT NULL,
             priority VARCHAR NOT NULL DEFAULT 'LOW',
             email VARCHAR(255) NOT NULL,
-            userId VARCHAR(255),
+            "userId" VARCHAR(255),
             CONSTRAINT fk_user
-            FOREIGN KEY(userId)
-            REFERENCES "user"(id)
+            FOREIGN KEY ("userId") REFERENCES "user"(id)
             ON DELETE CASCADE
         );
     `);
