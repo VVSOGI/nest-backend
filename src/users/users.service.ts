@@ -22,4 +22,8 @@ export class UsersService {
   async register(createUserDto: CreateUserDto) {
     return this.create(createUserDto);
   }
+
+  async updatePermission() {
+    return;
+  }
 }
