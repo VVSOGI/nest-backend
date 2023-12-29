@@ -1,4 +1,6 @@
 import { config } from 'dotenv';
+import { Board } from 'src/boards/entities/boards.entity';
+import { User } from 'src/users/entities/user.entity';
 import { DataSource } from 'typeorm';
 
 config({
@@ -11,9 +13,9 @@ export const dataSource = new DataSource({
   port: Number(process.env.DB_PORT),
   password: process.env.DB_PASSWORD,
   username: process.env.DB_USERNAME,
-  entities: [__dirname + '/../../src/**/*.entity{.js,.ts}'],
+  entities: [User, Board],
   database: process.env.DB_DATABASE,
   synchronize: false,
   logging: true,
-  migrations: [__dirname + '/../../src/migration/*.ts'],
+  migrations: [User, Board],
 });

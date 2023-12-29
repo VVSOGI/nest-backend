@@ -12,6 +12,9 @@ export class User {
   @Column({ type: 'varchar' })
   password: string;
 
+  @Column({ type: 'varchar', default: 'user' })
+  permission: string;
+
   @OneToMany(() => Board, (board) => board.user)
   boards: Board[];
 }

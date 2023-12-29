@@ -24,6 +24,6 @@ export class UsersService {
   }
 
   async updatePermission() {
-    return;
+    return this.usersRepository;
   }
 }

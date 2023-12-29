@@ -46,4 +46,14 @@ export class UsersRepository {
       throw new BadRequestException('User already exist');
     }
   }
+
+  async updateUserPermission(id: string, newPermission: string) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.permission = newPermission; // 'permission' 필드가 사용자 권한을 저장한다고 가정
+    await this.usersRepository.save(user);
+  }
 }
