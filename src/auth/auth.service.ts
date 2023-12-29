@@ -1,15 +1,10 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersRepository } from '../users/users.repository';
 import { LoginUserDto } from './dto/login-user.dto';
 import { HashingService } from 'src/utils/hashing.service';
 import { User } from '../users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { UpdatePermissions } from 'src/users/types/types';
 
 @Injectable()
 export class AuthService {
@@ -31,11 +26,11 @@ export class AuthService {
 
   private async generateToken(user: User) {
     const accessToken = await this.jwtService.signAsync(
-      { email: user.email },
+      { id: user.id, email: user.email },
       { expiresIn: '5m' },
     );
     const refreshToken = await this.jwtService.signAsync(
-      { email: user.email },
+      { id: user.id, email: user.email },
       { expiresIn: '7d' },
     );
     return { accessToken, refreshToken };
@@ -51,5 +46,17 @@ export class AuthService {
 
   async profile() {
     return 'profile';
+  }
+
+  async adminCheck(id: string) {
+    const { permission } = await this.usersRepository.findUserById(id);
+    if (permission !== 'admin') {
+      throw new UnauthorizedException('Only admin can update permission.');
+    }
+    return true;
+  }
+
+  async updatePermission(updatePermissions: UpdatePermissions) {
+    return this.usersRepository.updateUserPermission(updatePermissions);
   }
 }

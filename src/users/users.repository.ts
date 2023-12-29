@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { UpdatePermissions } from './types/types';
 
 @Injectable()
 export class UsersRepository {
@@ -47,13 +48,15 @@ export class UsersRepository {
     }
   }
 
-  async updateUserPermission(id: string, newPermission: string) {
-    const user = await this.usersRepository.findOne({ where: { id } });
+  async updateUserPermission(updatePermissions: UpdatePermissions) {
+    const user = await this.usersRepository.findOne({
+      where: { id: updatePermissions.id },
+    });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    user.permission = newPermission; // 'permission' 필드가 사용자 권한을 저장한다고 가정
+    user.permission = updatePermissions.permission;
     await this.usersRepository.save(user);
   }
 }
