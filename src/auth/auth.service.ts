@@ -27,11 +27,11 @@ export class AuthService {
   private async generateToken(user: User) {
     const accessToken = await this.jwtService.signAsync(
       { id: user.id, email: user.email },
-      { expiresIn: '5m' },
+      { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME },
     );
     const refreshToken = await this.jwtService.signAsync(
       { id: user.id, email: user.email },
-      { expiresIn: '7d' },
+      { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME },
     );
     return { accessToken, refreshToken };
   }
